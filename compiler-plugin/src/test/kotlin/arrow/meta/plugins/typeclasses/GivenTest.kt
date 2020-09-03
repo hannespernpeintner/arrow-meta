@@ -105,6 +105,28 @@ class GivenTest {
     )
   }
 
+    @Test
+    fun `generic object provider`() {
+        givenTest(
+                source = """
+                    
+        interface Sized<T> {
+            val sizeInBytes: Int
+        }
+        @Given object IntSized: Sized<Int> {
+          override val sizeInBytes = 4 
+        }
+        
+        @Given object DoubleSized: Sized<Double> {
+          override val sizeInBytes = 8
+        }
+        
+        val bufferSizeOfDoubleCorrect = given<Sized<Double>>().sizeInBytes
+      """,
+                expected = "bufferSizeOfDoubleCorrect" to 8
+        )
+    }
+
   private val prelude = """
     package test
     import arrow.*
